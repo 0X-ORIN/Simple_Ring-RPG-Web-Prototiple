@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Simple Ring RPG</title>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="css/main.css">
+	<link rel="stylesheet" href="css/dialougue.css">
+</head>
+<body>
+
+	<img class="bg-image" src="assets/backgrounds/CapaRPG.png" alt="Capa de fundo">
+
+	<div class="title-wrap">
+		<h1 class="title">Simple Ring RPG</h1>
+		<p class="subtitle">Escolha um caminho para continuar</p>
+	</div>
+
+	<div class="stage">
+		<div class="cluster cluster--left"><div class="slot slot--vertical" id="slotLeft"></div></div>
+		<div class="cluster cluster--center">
+			<div class="slot slot--horizontal" id="slotH1"></div>
+			<div class="slot slot--horizontal" id="slotH2"></div>
+		</div>
+		<div class="cluster cluster--right"><div class="slot slot--vertical" id="slotRight"></div></div>
+	</div>
+
+	<div class="modal-overlay" id="confirmModal">
+		<div class="modal-box">
+			<p class="modal-text">Tem certeza que quer apagar esse save? Essa ação não pode ser desfeita.</p>
+			<div class="modal-buttons">
+				<button class="btn-cancel" id="modalCancel" type="button">Cancelar</button>
+				<button class="btn-delete" id="modalConfirm" type="button">Apagar</button>
+			</div>
+		</div>
+	</div>
+
+	<div id="gameScreen" class="game-screen hidden">
+		<div class="bg-layer">
+			<img id="gameBackgroundBlur" class="bg-blur" src="" alt="">
+			<img id="gameBackground" class="bg-sharp" src="" alt="">
+		</div>
+
+		<div id="shopVendor" class="shop-vendor hidden"><img id="shopVendorImg" alt=""></div>
+
+		<div id="shopWindow" class="shop-window hidden">
+			<div class="shop-top">
+				<div class="shop-tabs">
+					<button class="shop-tab active" data-modo="comprar" type="button">Comprar</button>
+					<button class="shop-tab" data-modo="vender" type="button">Vender</button>
+				</div>
+				<div class="shop-gold">💰 <span id="shopGold"></span></div>
+			</div>
+			<div class="shop-list" id="shopList"></div>
+			<div class="shop-detail" id="shopDetail"></div>
+			<div class="shop-hint">↑↓ escolher · ←→ Comprar/Vender · Z confirmar · X voltar</div>
+		</div>
+
+		<div class="hud-top-left">
+			<button id="btnMenu" class="btn-menu" type="button">☰ Menu</button>
+			<button id="btnSalvarRapido" class="btn-menu" type="button">💾 Salvar</button>
+		</div>
+
+		<div class="hud-side">
+			<div class="hud-side-panel">
+				<div class="hud-bar">
+					<span class="hud-label">HP</span>
+					<div class="hud-track"><div class="hud-fill hud-fill--hp" id="hudHpFill"></div></div>
+					<span class="hud-value" id="hudHpValue"></span>
+				</div>
+				<div class="hud-bar">
+					<span class="hud-label">MP</span>
+					<div class="hud-track"><div class="hud-fill hud-fill--mp" id="hudMpFill"></div></div>
+					<span class="hud-value" id="hudMpValue"></span>
+				</div>
+				<div class="hud-bar">
+					<span class="hud-label">SP</span>
+					<div class="hud-track"><div class="hud-fill hud-fill--sp" id="hudSpFill"></div></div>
+					<span class="hud-value" id="hudSpValue"></span>
+				</div>
+				<div class="hud-gold"><span>Gold</span><span id="hudGoldValue"></span></div>
+				<div class="hud-clock">
+					<div class="clock-face">
+						<img id="clockFaceImg" class="clock-img" src="assets/ui/relogio.png" alt="">
+						<div class="clock-needle"></div>
+					</div>
+					<span class="clock-label" id="hudClockLabel"></span>
+				</div>
+			</div>
+		</div>
+
+		<div class="hud-bottom">
+			<div class="dialogue-box"><p id="dialogueText" class="dialogue-text"></p></div>
+			<div id="dialogueChoices" class="dialogue-choices"></div>
+		</div>
+
+		<div id="fadeOverlay" class="fade-overlay"></div>
+	</div>
+
+	<div id="menuOverlay" class="menu-overlay hidden">
+		<div class="menu-window">
+			<div class="menu-content">
+				<div class="menu-tabs">
+					<button class="menu-tab active" data-tab="status" type="button">Status</button>
+					<button class="menu-tab" data-tab="atributos" type="button">Atributos</button>
+					<button class="menu-tab" data-tab="equipamento" type="button">Equipamento</button>
+					<button class="menu-tab" data-tab="habilidades" type="button">Habilidades</button>
+					<button class="menu-tab" data-tab="missoes" type="button">Missões</button>
+					<button class="menu-tab" data-tab="configuracoes" type="button">Configurações</button>
+				</div>
+
+				<div class="menu-body">
+					<div class="menu-panel" data-panel="status">
+						<div class="status-left">
+							<div class="menu-panel-info">
+								<p class="menu-char-name" id="menuNome"></p>
+								<div class="menu-tags">
+									<span class="menu-tag" id="menuTagRaca"></span>
+									<span class="menu-tag" id="menuTagClasse"></span>
+									<span class="menu-tag" id="menuTagSexo"></span>
+								</div>
+								<p class="menu-nivel">Nível <span id="menuNivel"></span></p>
+								<div class="menu-stat-bars" id="menuStatBars"></div>
+								<p class="menu-xp-linha">🎒 XP carregado: <span id="menuXpCarregado"></span></p>
+							</div>
+							<div class="equip-grid" id="equipGrid"></div>
+						</div>
+						<div class="status-right">
+							<img class="menu-silhueta" src="assets/ui/SilhuetaHeroi.png" alt="Silhueta do personagem">
+							<div class="equip-desc" id="equipDesc"></div>
+						</div>
+					</div>
+
+					<div class="menu-panel hidden" data-panel="atributos">
+						<div class="atributos-col" id="menuAtributosEsq"></div>
+						<div class="atributos-center">
+							<div class="atributos-box--radar" id="menuRadar"></div>
+							<div class="pontos-box" id="menuPontosBox"></div>
+						</div>
+						<div class="atributos-col" id="menuAtributosDir"></div>
+					</div>
+
+					<div class="menu-panel hidden" data-panel="equipamento">
+						<div class="menu-tabs menu-tabs--sub">
+							<button class="menu-tab inv-filter active" data-filtro="arma" type="button">Armas</button>
+							<button class="menu-tab inv-filter" data-filtro="armadura" type="button">Armaduras</button>
+							<button class="menu-tab inv-filter" data-filtro="consumivel" type="button">Consumíveis</button>
+							<button class="menu-tab inv-filter" data-filtro="artefato" type="button">Artefatos</button>
+							<button class="menu-tab inv-filter" data-filtro="missao" type="button">Itens de Missão</button>
+						</div>
+						<div id="inventoryList" class="inventory-list"></div>
+					</div>
+
+					<div class="menu-panel hidden" data-panel="habilidades">
+						<p class="menu-empty">Nenhuma habilidade aprendida ainda.</p>
+					</div>
+
+					<div class="menu-panel hidden" data-panel="missoes">
+						<div id="missoesList" class="inventory-list"></div>
+					</div>
+
+					<div class="menu-panel hidden" data-panel="configuracoes">
+						<div class="config-section">
+							<h3 class="config-section-title">📁 Pasta de Saves</h3>
+							<p class="pasta-status-hint">Selecione a pasta <code>assets/Saves</code> que você já criou. O navegador só pede essa confirmação uma vez.</p>
+							<p class="pasta-status" id="pastaSavesStatus"></p>
+							<div class="config-section-actions">
+								<button class="choice-btn" id="btnVincularPasta" type="button">📁 Selecionar assets/Saves</button>
+								<button class="choice-btn hidden" id="btnReconectarPasta" type="button">🔓 Reconectar pasta</button>
+							</div>
+						</div>
+
+						<div class="config-section">
+							<h3 class="config-section-title">💾 Slots de Save</h3>
+							<div class="config-slots-grid" id="configSlotsGrid"></div>
+						</div>
+
+						<div class="config-section">
+							<h3 class="config-section-title">📤 Arquivo Avulso</h3>
+							<div class="config-section-actions">
+								<button class="choice-btn" id="btnExportarSave" type="button">Exportar save (.json)</button>
+								<label class="choice-btn" for="inputImportarSave">Importar save (.json)</label>
+								<input type="file" id="inputImportarSave" accept="application/json" class="hidden">
+							</div>
+						</div>
+
+						<div class="config-section">
+							<h3 class="config-section-title">⚙️ Sistema</h3>
+							<div class="config-section-actions">
+								<button class="choice-btn" id="btnVoltarTitulo" type="button">Voltar à tela inicial</button>
+								<button class="choice-btn choice-btn--debug" id="btnDebugReload" type="button">🔁 Recarregar jogo (debug)</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<button id="btnFecharMenu" class="btn-fechar-menu" type="button">✕</button>
+		</div>
+	</div>
+
+	<script src="js/core/gameState.js"></script>
+	<script src="js/core/fileStorage.js"></script>
+	<script src="js/data/items.js"></script>
+	<script src="js/data/quests.js"></script>
+	<script src="js/data/vendedores.js"></script>
+	<script src="js/data/locations.js"></script>
+	<script src="js/core/input.js"></script>
+	<script src="js/core/dialougueEngine.js"></script>
+	<script src="js/core/sceneManege.js"></script>
+	<script src="js/systems/inventory.js"></script>
+	<script src="js/systems/shop.js"></script>
+	<script src="js/systems/exploration.js"></script>
+	<script src="js/systems/quests.js"></script>
+	<script src="js/systems/menu.js"></script>
+	<script src="js/main.js"></script>
+</body>
+</html>

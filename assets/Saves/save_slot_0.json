@@ -1,0 +1,53 @@
+{
+  "nome": "Novo Aventureiro",
+  "raca": "Humano",
+  "sexo": "Masculino",
+  "classe": "Herói",
+  "nivel": 1,
+  "hp": {
+    "atual": 30,
+    "max": 30
+  },
+  "mp": {
+    "atual": 10,
+    "max": 10
+  },
+  "sp": {
+    "atual": 23,
+    "max": 23
+  },
+  "xp": 0,
+  "gold": 0,
+  "dia": 1,
+  "tempo": 0,
+  "local": "cidade_centro",
+  "status": {
+    "forca": 2,
+    "destreza": 2,
+    "velocidade": 1,
+    "constituicao": 3,
+    "inteligencia": 1,
+    "sabedoria": 1,
+    "carisma": 1,
+    "espirito": 2,
+    "sorte": 1,
+    "fe": 1
+  },
+  "pontosAtributo": 0,
+  "habilidades": [],
+  "inventario": [],
+  "missoes": [],
+  "equipamento": {
+    "armaPrimaria": null,
+    "armaSecundaria": null,
+    "armadura": null,
+    "artefatos": {
+      "cabeca": null,
+      "pescoco": null,
+      "bracoEsqA": null,
+      "bracoEsqB": null,
+      "bracoDirA": null,
+      "bracoDirB": null
+    }
+  }
+}
